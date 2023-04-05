@@ -3,7 +3,6 @@ package com.cy.store.controller;
 import com.cy.store.controller.ex.*;
 import com.cy.store.service.ex.*;
 import com.cy.store.util.JsonResult;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpSession;
@@ -41,6 +40,8 @@ public class BaseController {
             result.setState(6003);
         } else if (e instanceof FileUploadIOException) {
             result.setState(6004);
+        } else if (e instanceof  AddressCountLimitException) {
+            result.setState(4003);
         }
         return  result;
     }

@@ -19,8 +19,8 @@
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/top.css" />
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
-		<script type="text/javascript" src="../js/distpicker.data.js"></script>
-		<script type="text/javascript" src="../js/distpicker.js"></script>
+<!--		<script type="text/javascript" src="../js/distpicker.data.js"></script>-->
+<!--		<script type="text/javascript" src="../js/distpicker.js"></script>-->
 	</head>
 
 	<body>
@@ -287,6 +287,140 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+		<script type="text/javascript">
+			// value属性用于表示当前这个区域的code值，默认为0
+			let defaultOption = "<option value='0'>---- 请选择 ----</option>>";
+
+			//页面加载了先处理省的列表
+			$(document).ready(function () {
+				showProvinceList();
+				$("#city-list").append(defaultOption);//城市和地区列表上显示为默认的“请选择”
+				$("#area-list").append(defaultOption);
+			});
+
+			$("#city-list").change(function () {
+				//获取省的代码，即parent
+				let parent = $("#city-list").val();
+
+				//清空原有的城市列表选项，防止上一次列表选项遗留
+				$("#area-list").empty();
+				//填充默认值,"请选择"
+				$("#area-list").append(defaultOption);
+
+				//如果没选择省，则直接返回，结束函数
+				if (parent == 0) {
+					return
+				}
+
+				$.ajax({
+					url:"/districts/",
+					type:"GET",//POST也行，这里数据量小
+					data:"parent=" + parent,
+					dataType:"JSON",
+					success:function (json) {
+						if (json.state == 200) {
+							let list = json.data;
+							for (let i = 0; i < list.length; i++) {
+								let opt =
+										"<option value='"+list[i].code+"'>"+list[i].name+"</option>>";
+								$("#area-list").append(opt);
+							}
+						} else {
+							alert("获取区数据失败！");
+						}
+					},
+					error:function (xhr) {
+						alert("获取区数据时产生未知的异常" + xhr.message);
+					}
+				});
+			})
+
+			//监听省列表的改变，改变了则获取相应城市列表
+			$("#province-list").change(function () {
+				//获取省的代码，即parent
+				let parent = $("#province-list").val();
+
+				//清空原有的城市列表选项，防止上一次列表选项遗留
+				$("#area-list").empty();
+				$("#city-list").empty();
+				//填充默认值,"请选择"
+				$("#city-list").append(defaultOption);
+				$("#area-list").append(defaultOption);
+
+				//如果没选择省，则直接返回，结束函数
+				if (parent == 0) {
+					return
+				}
+
+				$.ajax({
+					url:"/districts/",
+					type:"GET",//POST也行，这里数据量小
+					data:"parent=" + parent,
+					dataType:"JSON",
+					success:function (json) {
+						if (json.state == 200) {
+							let list = json.data;
+							for (let i = 0; i < list.length; i++) {
+								let opt =
+										"<option value='"+list[i].code+"'>"+list[i].name+"</option>>";
+								$("#city-list").append(opt);
+							}
+						} else {
+							alert("获取城市数据失败！");
+						}
+					},
+					error:function (xhr) {
+						alert("获取城市数据时产生未知的异常" + xhr.message);
+					}
+				});
+			})
+
+
+
+			//向服务区发送获取省列表请求并将数据加到选项上(append)
+			function showProvinceList() {
+				$.ajax({
+					url:"/districts/",
+					type:"POST",
+					data:"parent=86",//返回所有省数据
+					dataType:"JSON",
+					success:function (json) {
+						if (json.state == 200) {
+							let list = json.data;
+							for (let i = 0; i < list.length; i++) {
+								let opt =
+								"<option value='"+list[i].code+"'>"+list[i].name+"</option>>";
+								$("#province-list").append(opt);
+							}
+						} else {
+							alert("获取省/直辖市数据失败！");
+						}
+					},
+					error:function (xhr) {
+						alert("获取省/直辖市数据时产生未知的异常" + xhr.message);
+					}
+				});
+			}
+
+			$("#btn-add-new-address").click(function () {
+				$.ajax({
+					url:"/addresses/add_new_address",
+					type:"POST",
+					data:$("#form-add-new-address").serialize(),
+					dataType:"JSON",
+					success:function (json) {
+						if (json.state == 200) {
+							alert("添加地址成功");
+						} else {
+							alert("添加地址失败");
+						}
+					},
+					error:function (xhr) {
+						alert("添加地址时产生未知的异常" + xhr.message);
+					}
+				});
+			});
+		</script>
 	</body>
 
 </html>

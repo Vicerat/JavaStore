@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性：用于指定当前的映射文件盒哪个接口进行映射，需要指定接口的文件路径，需要标注包的完整路径接口-->
+<mapper namespace="com.cy.store.mapper.DistrictMapper">
+    <select id="findByParent" resultType="com.cy.store.entity.District">
+        SELECT
+            *
+        FROM
+            t_dict_district
+        WHERE
+            parent = #{parent}
+        ORDER BY
+            code ASC
+    </select>
+    <select id="findNameByCode" resultType="java.lang.String">
+        SELECT
+            name
+        FROM
+            t_dict_district
+        WHERE
+            code = #{code}
+    </select>
+</mapper>
