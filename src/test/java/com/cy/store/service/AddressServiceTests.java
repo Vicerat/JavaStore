@@ -34,4 +34,9 @@ public class AddressServiceTests {
             System.out.println(address);
         }
     }
+
+    @Test
+    public void setDefaultAddress() {
+        iAddressService.setDefault(2,1,"zcc");
+    }
 }

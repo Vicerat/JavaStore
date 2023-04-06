@@ -4,8 +4,7 @@ import com.cy.store.entity.Address;
 import com.cy.store.mapper.AddressMapper;
 import com.cy.store.service.IAddressService;
 import com.cy.store.service.IDistrictService;
-import com.cy.store.service.ex.AddressCountLimitException;
-import com.cy.store.service.ex.InsertException;
+import com.cy.store.service.ex.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -69,5 +68,27 @@ public class AddressServiceImpl implements IAddressService {
             address.setModifiedTime(null);
         }
         return addressList;
+    }
+
+    @Override
+    public void setDefault(Integer aid, Integer uid, String username) {
+        Address address = addressMapper.findByAid(aid);
+        if (address == null) {
+            throw new AddressNotFoundException("尝试访问的地址不存在");
+        }
+
+        if (address.getUid() != uid) {
+            throw new AccessDeniedException("非法访问异常");
+        }
+
+        Integer rows = addressMapper.updateNonDefaultByUid(uid);
+        if (rows < 0) {
+            throw new UpdateException("设置默认收货地址时出现未知错误[1]");
+        }
+
+        rows = addressMapper.updateDefaultByAid(aid,username,new Date());
+        if (rows != 1) {
+            throw new UpdateException("设置默认收货地址时出现未知异常[2]");
+        }
     }
 }

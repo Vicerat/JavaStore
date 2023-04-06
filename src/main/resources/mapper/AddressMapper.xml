@@ -48,4 +48,32 @@
             is_default DESC,
             created_time DESC
     </select>
+    
+    <update id="updateNonDefaultByUid">
+        UPDATE
+            t_address
+        SET
+            is_default=0
+        WHERE
+            uid=#{uid}
+    </update>
+
+    <update id="updateDefaultByAid">
+        UPDATE
+            t_address
+        SET
+            is_default=1,
+            modified_time=#{modifiedTime},
+            modified_user=#{modifiedUser}
+        WHERE
+            aid=#{aid}
+    </update>
+    <select id="findByAid" resultMap="AddressEntity">
+        SELECT
+            *
+        FROM
+            t_address
+        WHERE
+            aid=#{aid}
+    </select>
 </mapper>
