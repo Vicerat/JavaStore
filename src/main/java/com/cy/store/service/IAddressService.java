@@ -22,4 +22,12 @@ public interface IAddressService {
      * @param username 当前登录用户名
      */
     void setDefault(Integer aid, Integer uid, String username);
+
+    /**
+     * 删除收货地址
+     * @param aid 收货地址id
+     * @param uid 归属的用户id
+     * @param username 当前登录的用户名
+     */
+    void delete(Integer aid, Integer uid, String username);
 }

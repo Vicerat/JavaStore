@@ -76,4 +76,24 @@
         WHERE
             aid=#{aid}
     </select>
+
+    <delete id="deleteByAid">
+        DELETE FROM
+            t_address
+        WHERE
+            aid=#{aid}
+    </delete>
+
+
+    <select id="findLastModified" resultMap="AddressEntity">
+        SELECT
+            *
+        FROM
+            t_address
+        WHERE
+            uid=#{uid}
+        ORDER BY
+            modified_time DESC
+            LIMIT 0,1
+    </select>
 </mapper>

@@ -46,6 +46,8 @@ public class BaseController {
             result.setState(4004);
         } else if (e instanceof  AccessDeniedException) {
             result.setState(4005);
+        } else if (e instanceof DeleteException) {
+            result.setState(5002);
         }
         return  result;
     }

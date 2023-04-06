@@ -8,6 +8,7 @@ import com.cy.store.service.ex.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -91,4 +92,46 @@ public class AddressServiceImpl implements IAddressService {
             throw new UpdateException("设置默认收货地址时出现未知异常[2]");
         }
     }
+
+    @Transactional
+    @Override
+    public void delete(Integer aid, Integer uid, String username) {
+        Address result = addressMapper.findByAid(aid);
+        if (result == null) {
+            throw new AddressNotFoundException("尝试访问的收货地址数据不存在");
+        }
+
+        if (uid != result.getUid()) {
+            throw new AccessDeniedException("非法访问");
+        }
+
+        Integer rows = addressMapper.deleteByAid(aid);
+        if (rows != 1) {
+            throw new DeleteException("删除收货地址数据时出现未知错误");
+        }
+
+        if (result.getIsDefault() == 0) {
+            return;
+        }
+
+        Integer count = addressMapper.countByUid(uid);
+        if (count == 0) {
+            return;
+        }
+
+        Address lastModified = addressMapper.findLastModified(uid);
+        Integer lastModifiedAid = lastModified.getAid();
+
+        rows = addressMapper.updateDefaultByAid(lastModifiedAid,username,new Date());
+        if (rows != 1) {
+            throw new UpdateException("更新收货地址时出现未知错误");
+        }
+
+    }
+
+    /*
+    *
+    *
+    *
+    * */
 }

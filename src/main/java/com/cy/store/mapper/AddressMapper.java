@@ -52,6 +52,18 @@ public interface AddressMapper {
      */
     Address findByAid(Integer aid);
 
+    /**
+     * 根据收货地址删除数据
+     * @param aid 收货地址id
+     * @return 受影响的行数
+     */
+    Integer deleteByAid(Integer aid);
 
+    /**
+     * 查询某用户最后修改的收货地址
+     * @param uid 归属的用户id
+     * @return
+     */
+    Address findLastModified(Integer uid);
 
 }
