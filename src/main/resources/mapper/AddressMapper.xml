@@ -12,7 +12,7 @@
         <result column="city_name" property="cityName"/>
         <result column="area_code" property="areaCode"/>
         <result column="area_name" property="areaName"/>
-        <result column="is_default" property="idDefault"/>
+        <result column="is_default" property="isDefault"/>
         <result column="created_user" property="createdUser"/>
         <result column="created_time" property="createdTime"/>
         <result column="modified_user" property="modifiedUser"/>
@@ -35,5 +35,17 @@
             t_address
         WHERE
             uid=#{uid}
+    </select>
+
+    <select id="findByUid" resultMap="AddressEntity" >
+        SELECT
+            *
+        FROM
+            t_address
+        WHERE
+            uid = #{uid}
+        ORDER BY
+            is_default DESC,
+            created_time DESC
     </select>
 </mapper>

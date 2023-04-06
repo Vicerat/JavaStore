@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AddressServiceTests {
@@ -22,5 +24,14 @@ public class AddressServiceTests {
         address.setPhone("123456789");
         address.setAddress("天堂");
         iAddressService.addNewAddress(uid,username,address);
+    }
+
+    @Test
+    public void getBYUid() {
+
+        List<Address> addressList = iAddressService.getByUid(1);
+        for (Address address : addressList) {
+            System.out.println(address);
+        }
     }
 }

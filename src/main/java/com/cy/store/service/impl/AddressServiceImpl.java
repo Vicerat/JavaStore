@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AddressServiceImpl implements IAddressService {
@@ -39,9 +40,9 @@ public class AddressServiceImpl implements IAddressService {
         address.setModifiedUser(username);
         address.setModifiedTime(now);
         address.setCreatedTime(now);
-        String provinceName = iDistrictService.getNameByCode(address.getProvinceName());
-        String cityName = iDistrictService.getNameByCode(address.getCityName());
-        String areaName = iDistrictService.getNameByCode(address.getAreaName());
+        String provinceName = iDistrictService.getNameByCode(address.getProvinceCode());
+        String cityName = iDistrictService.getNameByCode(address.getCityCode());
+        String areaName = iDistrictService.getNameByCode(address.getAreaCode());
         address.setProvinceName(provinceName);
         address.setCityName(cityName);
         address.setAreaName(areaName);
@@ -51,5 +52,22 @@ public class AddressServiceImpl implements IAddressService {
             throw new InsertException("插入收货地址数据时出现未知错误，请联系系统管理员");
         }
 
+    }
+
+    @Override
+    public List<Address> getByUid(Integer uid) {
+
+        List<Address> addressList = addressMapper.findByUid(uid);
+        for (Address address : addressList) {
+            address.setUid(null);
+            address.setProvinceCode(null);
+            address.setCityCode(null);
+            address.setAreaCode(null);
+            address.setCreatedUser(null);
+            address.setCreatedTime(null);
+            address.setModifiedUser(null);
+            address.setModifiedTime(null);
+        }
+        return addressList;
     }
 }
