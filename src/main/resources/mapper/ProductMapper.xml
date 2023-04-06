@@ -26,4 +26,14 @@
             priority DESC
             LIMIT 0,4
     </select>
+
+    <select id="findById" resultMap="ProductEntityMap">
+        SELECT
+            *
+        FROM
+            t_product
+        WHERE
+            id=#{id}
+
+    </select>
 </mapper>

@@ -296,6 +296,34 @@
 		</footer>
 		<!--页脚结束-->
 		<script type="text/javascript" src="../js/jquery-getUrlParam.js"></script>
+		<script type="text/javascript">
+			let id = $.getUrlParam("id");
+
+			$(document).ready(function() {
+				$.ajax({
+					url: "/products/" + id + "/details",
+					type: "GET",
+					dataType: "JSON",
+					success: function(json) {
+						if (json.state == 200) {
+							$("#product-title").html(json.data.title);
+							$("#product-sell-point").html(json.data.sellPoint);
+							$("#product-price").html(json.data.price);
+							for (let i = 1; i <= 5; i++) {
+								$("#product-image-" + i + "-big").attr("src", ".." +
+										json.data.image + i + "_big.png");
+								$("#product-image-" + i).attr("src", ".." + json.data.image
+										+ i + ".jpg");
+							}
+						} else if (json.state == 4006) { // 商品数据不存在的异常
+							location.href = "index.html";
+						} else {
+							alert("获取商品信息失败！" + json.message);
+						}
+					}
+				});
+			});
+		</script>
 	</body>
 
 </html>

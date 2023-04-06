@@ -48,6 +48,8 @@ public class BaseController {
             result.setState(4005);
         } else if (e instanceof DeleteException) {
             result.setState(5002);
+        } else if (e instanceof ProductNotFoundException) {
+            result.setState(4006);
         }
         return  result;
     }

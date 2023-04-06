@@ -1,6 +1,7 @@
 package com.cy.store.service;
 
 import com.cy.store.entity.Product;
+import com.cy.store.service.ex.ServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,17 @@ public class ProductServiceTests {
             System.out.println(item);
         }
 
+    }
+
+    @Test
+    public void findById() {
+        try {
+            Integer id = 100000179;
+            Product result = iProductService.findById(id);
+            System.out.println(result);
+        } catch (ServiceException e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
     }
 }

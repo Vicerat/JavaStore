@@ -11,4 +11,6 @@ public interface ProductMapper {
      * @return 热销商品的前四名集合
      */
     List<Product> findHotList();
+
+    Product findById(Integer id);
 }
